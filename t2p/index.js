@@ -6,6 +6,7 @@ var template_default = {
         if (!prompt) {
             return new Response("");
         }
+        console.log("env",env);
         console.log("提示词：",prompt);
 
         const messages = [
@@ -45,14 +46,14 @@ var template_default = {
                 content: prompt,
             },
         ];
-        const response = await env.AI.run("@cf/qwen/qwen1.5-14b-chat-awq", {messages});
+        const response = await env.AI.run(`${env.TEXT_MODEL}`, {messages});
         const imgPrompt = response.response
         console.log("图片提示词：",imgPrompt);
         const inputs = {
             prompt: imgPrompt
         };
         const imgResponse = await env.AI.run(
-            "@cf/bytedance/stable-diffusion-xl-lightning",
+            `${env.IMG_MODEL}`,
             inputs
         );
         return new Response(imgResponse, {
